@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Attendance System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/dist/styles.css">
+    <style>
+        :root {
+            --primary: #4A148C;
+            --primary-light: #7B1FA2;
+            --primary-lighter: #E1BEE7;
+        }
+    </style>
+</head>
+<body class="h-full bg-gray-50">
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="min-h-full flex flex-col">
+        <!-- Header -->
+        <header class="bg-indigo-600 shadow">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-white text-xl font-bold">Student Portal</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center text-white">
+                            <i class="fas fa-user-circle text-2xl mr-2"></i>
+                            <span id="studentName" class="font-medium">Loading...</span>
+                        </div>
+                        <button id="logoutBtn" 
+                                class="px-4 py-2 bg-white text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors duration-200"
+                                aria-label="Sign out">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex -mb-px space-x-8" aria-label="Tabs">
+                    <button data-tab="dashboard" class="tab-button border-b-2 border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 text-sm font-medium">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </button>
+                    <button data-tab="timetable" class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium">
+                        <i class="fas fa-calendar-alt mr-2"></i>Timetable
+                    </button>
+                    <button data-tab="attendance" class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium">
+                        <i class="fas fa-clipboard-check mr-2"></i>Attendance
+                    </button>
+                    <button data-tab="requests" class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium">
+                        <i class="fas fa-paper-plane mr-2"></i>My Requests
+                    </button>
+                    <button data-tab="profile" class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium">
+                        <i class="fas fa-user-circle mr-2"></i>Profile
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-grow container mx-auto px-4 py-8">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content">
+                <!-- Student Info Card -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">My Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <p class="text-gray-500 text-sm mb-1">Student ID</p>
+                            <p id="studentId" class="font-medium text-gray-900">-</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <p class="text-gray-500 text-sm mb-1">Class</p>
+                            <p id="studentClass" class="font-medium text-gray-900">-</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <p class="text-gray-500 text-sm mb-1">Attendance</p>
+                            <div class="flex items-center">
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                                    <div id="attendanceBar" class="bg-green-500 h-2.5 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <span id="attendancePercentage" class="text-sm font-medium text-gray-700">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                                <i class="fas fa-calendar-check text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Present</h3>
+                                <p id="presentCount" class="text-2xl font-semibold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                                <i class="fas fa-calendar-times text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Absent</h3>
+                                <p id="absentCount" class="text-2xl font-semibold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Late</h3>
+                                <p id="lateCount" class="text-2xl font-semibold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                                <i class="fas fa-percentage text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Attendance %</h3>
+                                <p id="overallAttendance" class="text-2xl font-semibold text-gray-900">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Classes -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">Upcoming Classes</h2>
+                        <button id="viewFullTimetable" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            View Full Timetable <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                    <div id="upcomingClasses" class="space-y-3">
+                        <!-- Will be populated by JavaScript -->
+                        <p class="text-gray-500 text-center py-4">Loading upcoming classes...</p>
+                    </div>
+                </div>
+
+                <!-- Recent Attendance -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">Recent Attendance</h2>
+                        <button id="viewAllAttendance" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            View All <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentAttendance" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">Loading recent attendance...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timetable Tab -->
+            <div id="timetable-tab" class="tab-content hidden">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">My Weekly Timetable</h2>
+                        <div class="flex items-center space-x-2">
+                            <button id="prevWeek" class="p-2 rounded-full hover:bg-gray-100">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span id="currentWeek" class="font-medium">This Week</span>
+                            <button id="nextWeek" class="p-2 rounded-full hover:bg-gray-100">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <button id="currentWeekBtn" class="ml-2 px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-md">
+                                Today
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <div id="timetable" class="min-w-full">
+                            <!-- Will be populated by JavaScript -->
+                            <div class="text-center py-8">
+                                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500 mb-2"></div>
+                                <p class="text-gray-500">Loading timetable...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div id="attendance-tab" class="tab-content hidden">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4 sm:mb-0">My Attendance</h2>
+                        <div class="flex space-x-2 w-full sm:w-auto">
+                            <div class="relative flex-grow sm:flex-grow-0">
+                                <select id="subjectFilter" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">All Subjects</option>
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            <div class="relative flex-grow sm:flex-grow-0">
+                                <select id="monthFilter" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">All Months</option>
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            <button id="exportBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center">
+                                <i class="fas fa-file-export mr-2"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Attendance Summary Chart -->
+                    <div class="bg-gray-50 p-6 rounded-lg mb-8">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Attendance Overview</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500">Overall Attendance</p>
+                                        <p id="overallAttendancePct" class="text-2xl font-bold text-gray-900">0%</p>
+                                    </div>
+                                    <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                                        <i class="fas fa-percentage text-xl"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div id="attendanceProgress" class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500">Present</p>
+                                        <p id="totalPresent" class="text-2xl font-bold text-green-600">0</p>
+                                    </div>
+                                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                                        <i class="fas fa-check-circle text-xl"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-xs text-gray-500">Last 30 days</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500">Absent</p>
+                                        <p id="totalAbsent" class="text-2xl font-bold text-red-600">0</p>
+                                    </div>
+                                    <div class="p-3 rounded-full bg-red-100 text-red-600">
+                                        <i class="fas fa-times-circle text-xl"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-xs text-gray-500">Last 30 days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attendance Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading attendance records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="mt-4 flex items-center justify-between">
+                        <div class="text-sm text-gray-500">
+                            Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalRecords">0</span> records
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="prevPage" class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Previous
+                            </button>
+                            <button id="nextPage" class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requests Tab -->
+            <div id="requests-tab" class="tab-content hidden">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">My Leave Requests</h2>
+                        <button id="newRequestBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center">
+                            <i class="fas fa-plus mr-2"></i>New Request
+                        </button>
+                    </div>
+                    
+                    <!-- Requests List -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsTableBody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No leave requests found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile-tab" class="tab-content hidden">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <!-- Profile Header -->
+                    <div class="bg-indigo-600 px-6 py-8 text-center">
+                        <div class="relative inline-block">
+                            <div class="h-24 w-24 rounded-full bg-white flex items-center justify-center mx-auto mb-4 overflow-hidden border-4 border-white shadow-lg">
+                                <img id="profileImage" src="https://ui-avatars.com/api/?name=John+Doe&background=7E3AF2&color=fff&size=128" alt="Profile" class="h-full w-full object-cover">
+                            </div>
+                            <button id="changePhotoBtn" class="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors">
+                                <i class="fas fa-camera text-indigo-600"></i>
+                            </button>
+                        </div>
+                        <h2 id="profileName" class="text-2xl font-bold text-white">John Doe</h2>
+                        <p id="profileRole" class="text-indigo-100">Student</p>
+                    </div>
+                    
+                    <!-- Profile Content -->
+                    <div class="p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-6">Personal Information</h3>
+                        
+                        <form id="profileForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                    <input type="text" id="fullName" name="fullName" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                    <input type="email" id="email" name="email" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
+                                </div>
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="studentId" class="block text-sm font-medium text-gray-700">Student ID</label>
+                                    <input type="text" id="studentIdProfile" name="studentId" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
+                                </div>
+                                <div>
+                                    <label for="class" class="block text-sm font-medium text-gray-700">Class</label>
+                                    <input type="text" id="class" name="class" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
+                                </div>
+                                <div>
+                                    <label for="section" class="block text-sm font-medium text-gray-700">Section</label>
+                                    <input type="text" id="section" name="section" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                                <textarea id="address" name="address" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="currentPassword" class="block text-sm font-medium text-gray-700">Current Password</label>
+                                        <input type="password" id="currentPassword" name="currentPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
+                                            <input type="password" id="newPassword" name="newPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        </div>
+                                        <div>
+                                            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                                            <input type="password" id="confirmPassword" name="confirmPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end pt-6">
+                                <button type="button" id="cancelProfileEdit" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Request Leave Modal -->
+            <div id="leaveModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <div class="mt-3 text-center">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Request Leave</h3>
+                        <div class="mt-2 px-7 py-3">
+                            <div class="mb-4">
+                                <label for="leaveDate" class="block text-sm font-medium text-gray-700 text-left mb-1">Date</label>
+                                <input type="date" id="leaveDate" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div class="mb-4">
+                                <label for="leaveReason" class="block text-sm font-medium text-gray-700 text-left mb-1">Reason</label>
+                                <select id="leaveReason" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                    <option value="Medical">Medical</option>
+                                    <option value="Personal">Personal</option>
+                                    <option value="Family Emergency">Family Emergency</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="leaveNotes" class="block text-sm font-medium text-gray-700 text-left mb-1">Additional Notes</label>
+                                <textarea id="leaveNotes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md"></textarea>
+                            </div>
+                        </div>
+                        <div class="px-4 py-3 flex justify-end space-x-3">
+                            <button id="cancelLeaveRequest" 
+                                    class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                Cancel
+                            </button>
+                            <button id="submitLeaveRequest" 
+                                    class="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                                Submit Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-center text-sm text-gray-500">
+                    &copy; 2025 Student Attendance Management System. All rights reserved.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 space-y-2 z-50" aria-live="polite"></div>
+
+    <script type="module" src="/src/js/student-dashboard.js"></script>
+</body>
+</html>

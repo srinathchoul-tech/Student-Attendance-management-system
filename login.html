@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Management System - Login</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="theme-color" content="#4A148C">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #4B0082;
+            --primary-light: #663399;
+            --primary-lighter: #E1BEE7;
+            --secondary: #FF6B6B;
+            --text: #2D3748;
+            --text-light: #718096;
+            --background: #F7FAFC;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --error: #F44336;
+            --warning: #FFC107;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4B0082 0%, #663399 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .login-container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .illustration {
+            flex: 1;
+            background: linear-gradient(rgba(74, 20, 140, 0.9), rgba(123, 31, 162, 0.9)), 
+                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.9375rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 20, 140, 0.1);
+            outline: none;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin: -10px 0 20px;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: var(--primary-light);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(74, 20, 140, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(74, 20, 140, 0.3);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E2E8F0;
+            margin: 0 10px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: var(--primary-light);
+        }
+
+        .form-footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Toast notification styles */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast-success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .toast-error {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .toast-warning {
+            background-color: #FFC107;
+            color: #212121;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            
+            .illustration {
+                padding: 30px 20px;
+                text-align: center;
+            }
+            
+            .login-form {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body class="h-full bg-gradient-to-br from-indigo-900 to-purple-900">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div class="max-w-5xl w-full bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div class="flex flex-col md:flex-row">
+                <!-- Left Side - Illustration -->
+                <div class="md:w-1/2 bg-gradient-to-br from-[#4B0082] to-[#663399] text-white p-8 md:p-12 flex flex-col justify-center">
+                    <div class="max-w-md mx-auto text-center md:text-left">
+                        <h2 class="text-3xl font-bold mb-4">Welcome Back!</h2>
+                        <p class="text-indigo-100 mb-8">Manage student attendance with ease and efficiency. Track, analyze, and improve your institution's performance.</p>
+                        
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-[#663399] rounded-full p-1">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                                <span class="ml-3 text-purple-100">Track attendance in real-time</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-[#663399] rounded-full p-1">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                                <span class="ml-3 text-purple-100">Generate detailed reports</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-[#663399] rounded-full p-1">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                                <span class="ml-3 text-purple-100">Access from anywhere, anytime</span>
+                            </div>
+                        </div>
+                        
+                        <div class="hidden md:block">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Student Illustration" class="h-48 mx-auto">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Login Form -->
+                <div class="md:w-1/2 p-8 sm:p-12">
+                    <div class="text-center">
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Sign In</h1>
+                        <p class="text-gray-600 mb-8">Welcome back! Please enter your details.</p>
+                    </div>
+                    
+                    <form id="loginForm" class="space-y-6">
+                        <!-- Error Message -->
+                        <div id="error-message" class="hidden p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"></div>
+                        
+                        <!-- Email Input -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input type="email" id="email" name="email" required
+                                    class="focus:ring-[#4B0082] focus:border-[#4B0082] block w-full pl-10 pr-3 py-3 border-2 border-gray-300 rounded-lg text-base"
+                                    placeholder="you@example.com">
+                            </div>
+                            <p class="mt-1 text-sm text-red-600 hidden" id="email-error"></p>
+                        </div>
+                        
+                        <!-- Password Input -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                <a href="#" id="forgotPasswordLink" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                    Forgot password?
+                                </a>
+                            </div>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password" id="password" name="password" required
+                                    class="focus:ring-[#4B0082] focus:border-[#4B0082] block w-full pl-10 pr-10 py-3 border-2 border-gray-300 rounded-lg text-base"
+                                    placeholder="••••••••">
+                                <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500 focus:outline-none">
+                                    <i class="fas fa-eye-slash"></i>
+                                </button>
+                            </div>
+                            <p class="mt-1 text-sm text-red-600 hidden" id="password-error"></p>
+                        </div>
+                        
+                        <!-- Remember Me -->
+                        <div class="flex items-center">
+                            <input id="rememberMe" name="rememberMe" type="checkbox" 
+                                class="h-4 w-4 text-[#4B0082] focus:ring-[#4B0082] border-gray-300 rounded">
+                            <label for="rememberMe" class="ml-2 block text-sm text-gray-700">
+                                Remember me
+                            </label>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div>
+                            <button type="submit" id="loginButton"
+                                class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-semibold rounded-lg text-white bg-[#4B0082] hover:bg-[#663399] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4B0082] transition-all duration-200 transform hover:scale-[1.02] shadow-lg">
+                                <span id="buttonText">Sign in</span>
+                                <span id="buttonSpinner" class="ml-2 hidden">
+                                    <i class="fas fa-circle-notch fa-spin"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Social Login -->
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-2 gap-3">
+                            <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4B0082]">
+                                <img class="w-5 h-5" src="https://www.google.com/favicon.ico" alt="Google">
+                                <span class="ml-2">Google</span>
+                            </a>
+                            <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4B0082]">
+                                <i class="fab fa-microsoft text-blue-600"></i>
+                                <span class="ml-2">Microsoft</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Sign Up Link -->
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-600">
+                            Don't have an account? 
+                            <a href="signup.html" class="font-medium text-[#4B0082] hover:text-[#663399]">
+                                Sign up
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <!-- Firebase and app scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js';
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            sendPasswordResetEmail
+        } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js';
+        import { 
+            getFirestore,
+            doc,
+            getDoc,
+            collection,
+            query,
+            where,
+            getDocs
+        } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js';
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD89Xg5V3EAozOEa-X0Um6TD0ykQQWbrPs",
+            authDomain: "ipa-system-54629.firebaseapp.com",
+            projectId: "ipa-system-54629",
+            storageBucket: "ipa-system-54629.firebasestorage.app",
+            messagingSenderId: "1008780769443",
+            appId: "1:1008780769443:web:7324e69a857356fdefe716",
+            measurementId: "G-8SE3HYY0YG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const togglePasswordBtn = document.getElementById('toggle-password');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const toastContainer = document.getElementById('toast-container');
+
+        // Toggle password visibility
+        if (togglePasswordBtn && passwordInput) {
+            togglePasswordBtn.addEventListener('click', () => {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                togglePasswordBtn.innerHTML = type === 'password' 
+                    ? '<i class="fas fa-eye-slash"></i>' 
+                    : '<i class="fas fa-eye"></i>';
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+            
+            // Remove toast after 5 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+                
+                // Sign in with Firebase
+                const { user } = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Get user role from Firestore
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                const userData = userDoc.exists() ? userDoc.data() : null;
+                const role = userData?.role || 'Teacher';
+                
+                // Save role to session storage
+                sessionStorage.setItem('AMS_ACTIVE_ROLE', role);
+                
+                // Redirect based on role (case-insensitive check)
+                if (role === 'Teacher' || role === 'teacher' || role === 'Admin' || role === 'admin') {
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = 'student.html';
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                let errorMessage = 'Failed to sign in. Please try again.';
+                
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage = 'Invalid email or password.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many failed attempts. Please try again later.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showToast(errorMessage, 'error');
+                
+                // Focus on the appropriate field
+                if (error.code === 'auth/user-not-found') {
+                    emailInput.focus();
+                } else if (error.code === 'auth/wrong-password') {
+                    passwordInput.focus();
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+
+        // Handle forgot password
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                
+                const email = emailInput.value.trim() || prompt('Please enter your email address:');
+                if (!email) return;
+                
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    showToast('Password reset email sent. Please check your inbox.', 'success');
+                } catch (error) {
+                    console.error('Password reset error:', error);
+                    let errorMessage = 'Failed to send password reset email.';
+                    
+                    if (error.code === 'auth/user-not-found') {
+                        errorMessage = 'No user found with this email address.';
+                    } else if (error.message) {
+                        errorMessage = error.message;
+                    }
+                    
+                    showToast(errorMessage, 'error');
+                }
+            });
+        }
+
+        // Check if user is already logged in
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in, redirect to appropriate dashboard
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', user.uid));
+                    const userData = userDoc.exists() ? userDoc.data() : null;
+                    const role = userData?.role || 'Teacher';
+                    
+                    // Save role to session storage
+                    sessionStorage.setItem('AMS_ACTIVE_ROLE', role);
+                    
+                    // Redirect based on role (case-insensitive check)
+                    if (role === 'Teacher' || role === 'teacher' || role === 'Admin' || role === 'admin') {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'student.html';
+                    }
+                } catch (error) {
+                    console.error('Error checking user role:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

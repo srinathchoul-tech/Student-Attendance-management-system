@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+match /databases/{database}/documents {
+// Helper function: Check if the user is authenticated
+function isAuthed() {
+return request.auth != null;
+}
+
+
+// Allow read and write operations only if user is authenticated
+match /artifacts/{app}/public/data/{collection=**}/{doc} {
+allow read: if isAuthed();
+allow write: if isAuthed();
+}
+}
+}

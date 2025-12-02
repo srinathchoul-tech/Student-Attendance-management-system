@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to Login - Student Attendance System</title>
+  <script>
+    // Redirect to login page
+    window.location.href = 'login.html';
+  </script>
+  <style>
+    :root {
+      --sidebar-bg: #4B0082;
+      --header-bg: #663399;
+      --text-light: #f3f4f6;
+      --card-shadow: 0 10px 25px rgba(76, 29, 149, 0.08);
+      --border-muted: #e5e7eb;
+    }
+
+    .sidebar {
+      background-color: var(--sidebar-bg);
+      width: 250px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+    }
+
+    .main-content {
+      margin-left: 250px;
+    }
+
+    .nav-item {
+      color: var(--text-light);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-item i {
+      width: 24px;
+      margin-right: 12px;
+    }
+
+    .nav-item.active,
+    .nav-item:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    .tile-card {
+      box-shadow: var(--card-shadow);
+    }
+
+    .dashboard-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 3rem 1rem 4rem;
+    }
+
+    .dashboard-card {
+      width: 230px;
+      height: 130px;
+      border-radius: 6px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .dashboard-card i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+
+    .dashboard-card span {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .dashboard-card strong {
+      font-size: 2rem;
+      line-height: 1;
+      margin-top: 0.3rem;
+    }
+
+    .dashboard-classes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .dashboard-classes-header h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #4B0082;
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      padding: 0 1rem 1.5rem;
+    }
+
+    .class-card {
+      background: #fff;
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      border-left: 5px solid #4B0082;
+      box-shadow: var(--card-shadow);
+    }
+
+    .class-card .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: #888;
+      letter-spacing: 0.05em;
+    }
+
+    .class-card .name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0.25rem 0;
+    }
+
+    .class-card .meta {
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .class-card.empty {
+      text-align: center;
+      color: #9CA3AF;
+      border-left-color: #d1d5db;
+    }
+
+    .attendance-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .attendance-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.5rem;
+    }
+
+    .attendance-table thead th {
+      text-align: left;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      color: #6b7280;
+      padding-bottom: 0.5rem;
+    }
+
+    .attendance-row {
+      background: #f9fafb;
+      border-radius: 999px;
+      padding: 0.85rem 1.25rem;
+      box-shadow: inset 0 0 0 1px #e5e7eb;
+    }
+
+    .attendance-row td {
+      padding: 0.35rem 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .attendance-row td:first-child {
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .attendance-rate {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(75, 0, 130, 0.08);
+      color: #4B0082;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .attendance-toggle {
+      width: 40px;
+      height: 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .attendance-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: 0.2s;
+      border-radius: 999px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      top: 2px;
+      background-color: white;
+      transition: 0.2s;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .attendance-toggle input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #5e17eb, #8e2de2);
+    }
+
+    .attendance-toggle input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+
+    .attendance-summary {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .attendance-summary .pill {
+      background: rgba(75, 0, 130, 0.08);
+      color: #4B0082;
+      font-weight: 600;
+    }
+
+    .student-results-table th,
+    .student-results-table td {
+      padding: 0.75rem 1.5rem;
+    }
+
+    .student-results-table td {
+      white-space: nowrap;
+    }
+
+    .class-overview-table th,
+    .class-overview-table td {
+      padding: 0.75rem 1.5rem;
+    }
+
+    .class-overview-table td:first-child {
+      font-weight: 600;
+      color: #4B0082;
+    }
+
+    .section-card {
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-muted);
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .student-tab-panel {
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .student-tab-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .tab-link {
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      padding-bottom: 0.35rem;
+      font-weight: 600;
+      color: #6b7280;
+    }
+
+    .tab-link.active {
+      color: #4B0082;
+      border-color: #4B0082;
+      font-weight: 700;
+    }
+
+    .form-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .form-input {
+      width: 100%;
+      border-bottom: 2px solid var(--border-muted);
+      padding: 0.35rem 0.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #4B0082;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.65rem 1.6rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+      box-shadow: 0 10px 24px rgba(75, 0, 130, 0.15);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid rgba(255, 255, 255, 0.4);
+      outline-offset: 3px;
+    }
+
+    .btn-solid {
+      background: linear-gradient(135deg, #5e17eb, #8e2de2);
+      color: #fff;
+    }
+
+    .btn-solid:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(75, 0, 130, 0.25);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      color: #4B0082;
+      box-shadow: 0 12px 18px rgba(255, 255, 255, 0.45);
+    }
+
+    .btn-ghost:hover {
+      background: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-muted {
+      background: #f3f4f6;
+      color: #4B0082;
+      box-shadow: none;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-muted:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .btn i {
+      font-size: 0.9rem;
+      margin-right: 0.4rem;
+    }
+
+    .action-btn {
+      min-width: 120px;
+      padding: 0.65rem 1.5rem;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+    }
+
+    .action-btn.update {
+      background-color: #1b9be9;
+    }
+
+    .action-btn.delete {
+      background-color: #e64646;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(75, 0, 130, 0.1);
+      color: #4B0082;
+      font-size: 0.85rem;
+    }
+
+    #add-student-view .student-tab-panel {
+      margin-top: 1.25rem;
+    }
+
+    #add-student-view .student-tab-panel:first-of-type {
+      margin-top: 0.5rem;
+    }
+
+    .nav-item i {
+      width: 20px;
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="p-4">
+      <h1 class="text-white text-xl font-bold mb-8">Attendance Management System</h1>
+    </div>
+        
+    <div class="space-y-2">
+      <a href="#" class="nav-item active" id="nav-dashboard">
+        <i class="fas fa-chart-line"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-attendance">
+        <i class="fas fa-calendar-check"></i>
+        <span>Attendance</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-add-class">
+        <i class="fas fa-chalkboard"></i>
+        <span>Add Class</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-add-student">
+        <i class="fas fa-user-graduate"></i>
+        <span>Add Student</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-report">
+        <i class="fas fa-file-alt"></i>
+        <span>Report</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-register">
+        <i class="fas fa-cog"></i>
+        <span>Register</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header with Date/Time Display -->
+    <!-- Top Bar: Full width date/time -->
+    <div class="bg-gray-200 text-purple-900 px-4 py-2 text-center">
+      <div id="header-datetime" class="text-sm font-medium">Wednesday, September 15, 2021 8:49:57 AM</div>
+    </div>
+  <style>
+    .toast-enter {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .toast-enter-active {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 300ms, transform 300ms;
+    }
+    .toast-exit {
+        opacity: 1;
+    }
+    .toast-exit-active {
+        opacity: 0;
+        transform: scale(0.9);
+        transition: opacity 300ms, transform 300ms;
+    }
+</style>
+
+    <!-- Main Header -->
+    <header class="bg-[#663399] text-white p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <div>
+          <div class="text-sm">Welcome: <span id="user-name">Guest</span></div>
+          <div class="text-sm">Role: <span id="user-role">Guest</span></div>
+        </div>
+        <button id="logout-btn" class="btn btn-ghost text-sm px-4 py-2">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div id="page-content" class="container mx-auto p-6">
+      <!-- Dashboard default content - Statistics Cards -->
+      <div id="dashboard-view">
+        <div class="bg-white section-card">
+          <div class="dashboard-cards">
+            <div class="dashboard-card" style="background-color:#F0A500;">
+              <i class="fas fa-chalkboard"></i>
+              <span>Classes</span>
+              <strong id="total-classes">0</strong>
+            </div>
+
+            <div class="dashboard-card" style="background-color:#0077C2;">
+              <i class="fas fa-user-graduate"></i>
+              <span>Student</span>
+              <strong id="total-students">0</strong>
+            </div>
+
+            <div class="dashboard-card" style="background-color:#5C2C00;">
+              <i class="fas fa-users-cog"></i>
+              <span>Role</span>
+              <strong id="user-role-count">2</strong>
+            </div>
+          </div>
+
+          <div class="dashboard-classes-header">
+            <h3>Available Classes</h3>
+            <span class="text-sm text-gray-500">Latest additions appear here</span>
+          </div>
+
+          <div id="dashboard-class-grid" class="class-grid">
+            <div class="class-card empty">No classes yet. Add one to get started!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance view - Mark Attendance -->
+      <div id="attendance-view" class="hidden">
+        <!-- Mark Attendance Panel -->
+        <div class="bg-white p-6 rounded section-card mb-8 attendance-panel">
+          <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 pr-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Date:</label>
+                <div class="flex items-center gap-2">
+                  <input type="date" id="attendance-date" class="border-b-2 border-gray-300 py-2 px-2 flex-1" />
+                  <button class="text-gray-500">📅</button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Class:</label>
+                <select id="attendance-class" class="w-full border-b-2 border-gray-300 py-2 px-2">
+                  <option value="">Select class</option>
+                </select>
+              </div>
+            </div>
+            <label class="flex items-center gap-2 text-sm text-gray-600">
+              <input type="checkbox" id="select-all-students" class="w-4 h-4" />
+              <span>Select everyone</span>
+            </label>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="attendance-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Reg No.</th>
+                  <th>Attendance</th>
+                  <th class="text-center">Present?</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-table-body">
+                <tr>
+                  <td colspan="4" class="text-center text-gray-400 py-8">Select a class to load students.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="attendance-summary">
+            <span class="pill">Present: <strong id="attendance-present-count">0</strong></span>
+            <span class="pill">Absent: <strong id="attendance-absent-count">0</strong></span>
+          </div>
+
+          <button id="btn-mark-attendance" class="btn btn-solid">
+            Mark Attendance
+          </button>
+        </div>
+      </div>
+
+      <!-- Add Class view -->
+      <div id="add-class-view" class="hidden">
+        <div class="bg-white p-6 rounded section-card mb-8">
+          <div class="flex flex-col lg:flex-row justify-between gap-6">
+            <div class="flex-1">
+              <h2 class="text-purple-800 font-semibold text-lg mb-4">Add Class</h2>
+              <form id="add-class-form" class="space-y-4">
+                <div>
+                  <label class="form-label">Class Name</label>
+                  <input type="text" id="class-name" class="form-input" placeholder="e.g., Class 10-A" required />
+                </div>
+                <div>
+                  <label class="form-label">Section</label>
+                  <input type="text" id="class-section" class="form-input" placeholder="Section" required />
+                </div>
+                <div>
+                  <label class="form-label">Class Teacher</label>
+                  <input type="text" id="class-teacher" class="form-input" placeholder="Full Name" required />
+                </div>
+                <div>
+                  <label class="form-label">Schedule</label>
+                  <input type="text" id="class-schedule" class="form-input" placeholder="Mon-Fri . 09:00 - 11:00" required />
+                </div>
+                <button type="submit" class="btn btn-solid w-full justify-center">
+                  Save Class
+                </button>
+              </form>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-purple-800 font-semibold text-lg mb-4">Quick Tips</h3>
+              <ul class="space-y-3 text-gray-600 text-sm">
+                <li class="pill w-fit">Keep class codes simple</li>
+                <li>Create the class first so it becomes available for student assignment.</li>
+                <li>Use schedule to help students see timings inside the app.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded section-card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-purple-800 font-semibold text-lg">Classes Overview</h3>
+            <span class="pill" id="class-count-pill">0 Active</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-sm class-overview-table">
+              <thead>
+                <tr class="text-left border-b border-gray-200 text-gray-500">
+                  <th class="py-3">#</th>
+                  <th class="py-3">Class</th>
+                  <th class="py-3">Section</th>
+                  <th class="py-3">Teacher</th>
+                  <th class="py-3">Schedule</th>
+                </tr>
+              </thead>
+              <tbody id="class-list">
+                <tr>
+                  <td colspan="5" class="py-3 text-center text-gray-400">No classes yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Student view -->
+      <div id="add-student-view" class="hidden">
+        <div class="bg-white p-6 rounded section-card">
+          <h2 class="text-purple-800 font-semibold text-lg mb-6">Student Workspace</h2>
+
+          <div class="student-tab-controls text-sm">
+            <button class="tab-link active pb-3" data-tab-target="student-add-panel">Add Student</button>
+            <button class="tab-link pb-3" data-tab-target="student-search-panel">Search Student</button>
+            <button class="tab-link pb-3" data-tab-target="student-update-panel">Update & Delete Student</button>
+          </div>
+
+          <div id="student-add-panel" class="student-tab-panel">
+            <form id="add-student-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="form-label">Full Name</label>
+                <input id="student-name" type="text" class="form-input" placeholder="Enter full name" required />
+              </div>
+              <div>
+                <label class="form-label">Registration No.</label>
+                <input id="student-reg" type="text" class="form-input" placeholder="e.g., S012" required />
+              </div>
+              <div>
+                <label class="form-label">Class</label>
+                <select id="student-class" class="form-input" required>
+                  <option value="">Select Class</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Gender</label>
+                <div class="flex items-center gap-6 mt-2">
+                  <label class="flex items-center gap-2 text-sm">
+                    <input type="radio" name="student-gender" value="Male" required /> Male
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input type="radio" name="student-gender" value="Female" required /> Female
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="form-label">Parent Contact</label>
+                <input id="student-parent" type="text" class="form-input" placeholder="+1 555 0102" required />
+              </div>
+              <div class="flex items-center">
+                <button type="submit" class="btn btn-solid w-full justify-center">
+                  Add Student
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div id="student-search-panel" class="student-tab-panel hidden">
+            <form id="search-student-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div>
+                <label class="form-label">Name</label>
+                <input type="text" id="search-name" class="form-input" placeholder="Search by name" />
+              </div>
+              <div>
+                <label class="form-label">Reg No.</label>
+                <input type="text" id="search-reg" class="form-input" placeholder="S010" />
+              </div>
+              <div>
+                <label class="form-label">Class</label>
+                <select id="search-class" class="form-input">
+                  <option value="">Any class</option>
+                </select>
+              </div>
+              <div class="flex items-end">
+                <button type="submit" class="btn btn-solid w-full justify-center">
+                  Search
+                </button>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto">
+              <table class="w-full border-collapse text-sm student-results-table">
+                <thead>
+                  <tr class="text-left border-b border-gray-200 text-gray-500">
+                    <th class="py-3">Name</th>
+                    <th class="py-3">Reg No.</th>
+                    <th class="py-3">Class</th>
+                    <th class="py-3">Gender</th>
+                    <th class="py-3">Parent Contact</th>
+                  </tr>
+                </thead>
+                <tbody id="search-results-body">
+                  <tr>
+                    <td colspan="5" class="py-3 text-center text-gray-400">No results yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="student-update-panel" class="student-tab-panel hidden">
+            <form id="update-student-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="form-label">Registration No.</label>
+                <input id="update-reg" type="text" class="form-input" placeholder="Enter Reg No." required />
+              </div>
+              <div class="flex items-end">
+                <button type="button" id="load-student-btn" class="btn btn-muted w-full justify-center">
+                  Load Student
+                </button>
+              </div>
+              <div>
+                <label class="form-label">Full Name</label>
+                <input id="update-name" type="text" class="form-input" placeholder="Full Name" required />
+              </div>
+              <div>
+                <label class="form-label">Class</label>
+                <select id="update-class" class="form-input" required>
+                  <option value="">Select Class</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Gender</label>
+                <div class="flex items-center gap-6 mt-2">
+                  <label class="flex items-center gap-2 text-sm">
+                    <input type="radio" name="update-gender" value="Male" /> Male
+                  </label>
+                  <label class="flex items-center gap-2 text-sm">
+                    <input type="radio" name="update-gender" value="Female" /> Female
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="form-label">Parent Contact</label>
+                <input id="update-parent" type="text" class="form-input" placeholder="+1 555 0102" />
+              </div>
+              <div class="flex gap-4 mt-4">
+                <button type="button" id="btn-update-student" class="action-btn update">Update</button>
+                <button type="button" id="btn-delete-student" class="action-btn delete">Delete</button>
+              </div>
+            </form>
+            <p id="update-feedback" class="mt-4 text-sm text-gray-600"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report view -->
+      <div id="report-view" class="hidden">
+        <div class="bg-white p-6 rounded section-card">
+          <h2 class="text-purple-800 font-semibold text-lg mb-6">Attendance Report</h2>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div class="bg-purple-50 rounded p-4">
+              <p class="text-sm text-purple-800">Overall Attendance</p>
+              <p class="text-3xl font-bold text-purple-900" id="report-overall">--</p>
+            </div>
+            <div class="bg-green-50 rounded p-4">
+              <p class="text-sm text-green-800">Most Punctual Class</p>
+              <p class="text-xl font-bold text-green-900" id="report-best-class">--</p>
+            </div>
+            <div class="bg-yellow-50 rounded p-4">
+              <p class="text-sm text-yellow-800">Needs Attention</p>
+              <p class="text-xl font-bold text-yellow-900" id="report-risk-class">--</p>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-sm">
+              <thead>
+                <tr class="text-left border-b border-gray-200 text-gray-500">
+                  <th class="py-3">Class</th>
+                  <th class="py-3">Date</th>
+                  <th class="py-3">Present</th>
+                  <th class="py-3">Absent</th>
+                  <th class="py-3">Marked By</th>
+                </tr>
+              </thead>
+              <tbody id="report-table-body">
+                <tr>
+                  <td colspan="5" class="py-3 text-center text-gray-400">No reports yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Register view -->
+      <div id="register-view" class="hidden">
+        <div class="bg-white p-6 rounded section-card">
+          <h2 class="text-purple-800 font-semibold text-lg mb-4">Register Teacher/Staff</h2>
+          <form id="register-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="form-label">Full Name</label>
+              <input type="text" id="register-name" class="form-input" placeholder="Full Name" required />
+            </div>
+            <div>
+              <label class="form-label">Email Address</label>
+              <input type="email" id="register-email" class="form-input" placeholder="teacher@email.com" required />
+            </div>
+            <div>
+              <label class="form-label">Role</label>
+              <select id="register-role" class="form-input" required>
+                <option value="Teacher">Teacher</option>
+                <option value="Class Tutor">Class Tutor</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Contact</label>
+              <input type="text" id="register-contact" class="form-input" placeholder="+1 555 0123" required />
+            </div>
+            <div>
+              <label class="form-label">Temporary Password</label>
+              <input type="text" id="register-password" class="form-input" placeholder="Auto generated" value="Temp@1234" />
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="btn btn-solid w-full justify-center">
+                Create Account
+              </button>
+            </div>
+          </form>
+          <p id="register-feedback" class="mt-4 text-sm text-gray-600"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD89Xg5V3EAozOEa-X0Um6TD0ykQQWbrPs",
+      authDomain: "ipa-system-54629.firebaseapp.com",
+      projectId: "ipa-system-54629",
+      storageBucket: "ipa-system-54629.firebasestorage.app",
+      messagingSenderId: "1008780769443",
+      appId: "1:1008780769443:web:7324e69a857356fdefe716",
+      measurementId: "G-8SE3HYY0YG"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+  <script type="module" src="src/js/dashboard.js"></script>
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2"></div>
+</body>
+</html>

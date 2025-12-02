@@ -1,0 +1,9 @@
+{
+  "name": "IPA System",
+  "short_name": "IPA",
+  "theme_color": "#4a8eff",
+  "background_color": "#0f1724",
+  "display": "standalone",
+  "start_url": "./index.html",
+  "icons": []
+}
